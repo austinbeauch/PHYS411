@@ -110,3 +110,44 @@ figure(1)
  disp("Minutely mean and std: " + ...
      nanmean(data_minute) + " " + nanstd(data_minute))
  disp("Hourly mean and std: " + nanmean(TTH) + " " + nanstd(TTH))
+ 
+ means = [];
+ stds = [];
+for iYear = 2010:2017
+    disp(iYear)
+    tt_start = datenum(iYear,1,1,0,0,0);
+    tt_end   = datenum(iYear,12,31,23,59,59);
+    iit = find(tt_all >= tt_start & tt_all <= tt_end);
+    tt  = tt_all(iit);
+    TTH = TTH_s(iit);
+    means = [means ; nanmean(TTH)];
+    stds = [stds ; nanstd(TTH)];
+end
+
+figure(2)
+ histogram(means, 5);
+ xlabel('Annual Mean Temperature[^oC]')
+ ylabel('Frequency')
+ title("Annual Mean Temperature Histogram")
+figure(3)
+ histogram(stds, 5);
+  xlabel('Annual Temperature Standard Deviation [^oC]')
+ ylabel('Frequency')
+ title("Annual Temperature Standard Deviation Histogram")
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
