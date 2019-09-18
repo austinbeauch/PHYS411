@@ -114,7 +114,6 @@ figure(1)
  means = [];
  stds = [];
 for iYear = 2010:2017
-    disp(iYear)
     tt_start = datenum(iYear,1,1,0,0,0);
     tt_end   = datenum(iYear,12,31,23,59,59);
     iit = find(tt_all >= tt_start & tt_all <= tt_end);
