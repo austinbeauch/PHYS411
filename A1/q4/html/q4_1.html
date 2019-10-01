@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>q4_1</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-09-17"><meta name="DC.source" content="q4_1.m"><style type="text/css">
+      --><title>q4_1</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-09-19"><meta name="DC.source" content="q4_1.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -192,18 +192,20 @@ figure(1)
 <span class="keyword">end</span>
 
 figure(2)
+ subplot(2,1,1)
  histogram(means, 5);
  xlabel(<span class="string">'Annual Mean Temperature[^oC]'</span>)
  ylabel(<span class="string">'Frequency'</span>)
  title(<span class="string">"Annual Mean Temperature Histogram"</span>)
-figure(3)
+figure(2)
+subplot(2,1,2)
  histogram(stds, 5);
   xlabel(<span class="string">'Annual Temperature Standard Deviation [^oC]'</span>)
  ylabel(<span class="string">'Frequency'</span>)
  title(<span class="string">"Annual Temperature Standard Deviation Histogram"</span>)
 </pre><pre class="codeoutput">Minutely mean and std: 11.2953 5.609
 Hourly mean and std: 11.0954 5.4765
-</pre><img vspace="5" hspace="5" src="q4_1_01.png" alt=""> <img vspace="5" hspace="5" src="q4_1_02.png" alt=""> <img vspace="5" hspace="5" src="q4_1_03.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="q4_1_01.png" alt=""> <img vspace="5" hspace="5" src="q4_1_02.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 close all;
 clear;
@@ -331,31 +333,17 @@ for iYear = 2010:2017
 end
 
 figure(2)
+ subplot(2,1,1)
  histogram(means, 5);
  xlabel('Annual Mean Temperature[^oC]')
  ylabel('Frequency')
  title("Annual Mean Temperature Histogram")
-figure(3)
+figure(2)
+subplot(2,1,2)
  histogram(stds, 5);
   xlabel('Annual Temperature Standard Deviation [^oC]')
  ylabel('Frequency')
  title("Annual Temperature Standard Deviation Histogram")
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
  
 ##### SOURCE END #####
 --></body></html>

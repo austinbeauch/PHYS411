@@ -124,29 +124,15 @@ for iYear = 2010:2017
 end
 
 figure(2)
+ subplot(2,1,1)
  histogram(means, 5);
  xlabel('Annual Mean Temperature[^oC]')
  ylabel('Frequency')
  title("Annual Mean Temperature Histogram")
-figure(3)
+figure(2)
+subplot(2,1,2)
  histogram(stds, 5);
   xlabel('Annual Temperature Standard Deviation [^oC]')
  ylabel('Frequency')
  title("Annual Temperature Standard Deviation Histogram")
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
  
