@@ -36,8 +36,10 @@ t = tinv([0.05/2, 1-0.05/2], N-2);
 Sx = std(x);
 S_eps = sum((y - f(x)).^2) / (N-2);
 delta_b = S_eps * t / (sqrt(N-1) * Sx);
-delta_a = S_eps * t / (sqrt(N-1) * std(y));
+delta_a = (mean(wave) - b*mean(wind+delta_b)) - a;
+       
 fprintf("Slope b interval +/- %0.5f\n", delta_b(1))
+fprintf("Slope a interval +/- %0.5f\n", delta_a(1))
 
 figure(1)
  hold on;
@@ -76,17 +78,3 @@ figure(3)
  xlabel("Slope")
  ylabel("Frequency")
  title("Bootstrap method with 1000 iterations")
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
