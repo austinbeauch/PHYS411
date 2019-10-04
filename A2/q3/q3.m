@@ -34,24 +34,24 @@ x = wind;
 y = wave; 
 t = tinv([0.05/2, 1-0.05/2], N-2);
 Sx = std(x);
-S_eps = sum((y - f(x)).^2) / (N-2);
+S_eps = sqrt(sum((y - f(x)).^2) / (N-2));
+
 delta_b = S_eps * t / (sqrt(N-1) * Sx);
-delta_a = (mean(wave) - b*mean(wind+delta_b)) - a;
-       
-fprintf("Slope b interval +/- %0.5f\n", delta_b(1))
-fprintf("Slope a interval +/- %0.5f\n", delta_a(1))
+delta_a = -((a + (b+delta_b)*mean(wind)) - mean(wave));
+
+fprintf("95%% confidence interval for b: [%0.5f, %0.4f]\n", b+delta_b(1), b+delta_b(2))
+fprintf("95%% confidence for interval a: [%0.5f, %0.4f]\n", b+delta_a(1), b+delta_a(2))
 
 figure(1)
  hold on;
- plot(temp_x, (a+delta_a(1))+(b+delta_b(1))*temp_x, 'k')
- plot(temp_x, (a+delta_a(2))+(b+delta_b(2))*temp_x, 'k')
- legend({'Data', 'Linear Fit', 'Lower interval', 'Upper interval'})
+ plot(temp_x, (a+delta_a(1))+(b+delta_b(1))*temp_x, 'b')
+ plot(temp_x, (a+delta_a(2))+(b+delta_b(2))*temp_x, 'b')
+ plot(mean(wind), mean(wave), 'go')
+ legend({'Data', 'Linear Fit', 'Lower interval', 'Upper interval', 'mean(x,y)'})
   
- 
- range_10 = ((a+delta_a(2))+(b+delta_b(2))*10) - ...
-     ((a+delta_a(1))+(b+delta_b(1))*10);
- 
- fprintf("The range at u=10 m/s is %0.4f\n", range_10)
+r = [((a+delta_a(2))+(b+delta_b(2))*10), ... 
+     ((a+delta_a(1))+(b+delta_b(1))*10)];
+fprintf("The range at u=10 m/s is [%0.4f, %0.4f]\n", r(2), r(1))
   
 wind = [wind; 30];
 wave = [wave; 33];

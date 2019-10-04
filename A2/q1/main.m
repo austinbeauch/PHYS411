@@ -85,26 +85,3 @@ disp("2018 minute mean: " + min_mean_2018)
 [conf_2017_min, conf_2018_min] = conf(min_temps_2017, min_temps_2018);
 disp("2017 confidence interval: [" + conf_2017_min(1) + ", " + conf_2017_min(2) + "]");
 disp("2018 confidence interval: [" + conf_2018_min(1) + ", " + conf_2018_min(2) + "]");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
- 

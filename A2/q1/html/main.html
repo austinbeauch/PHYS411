@@ -1,0 +1,257 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>main</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-10-03"><meta name="DC.source" content="main.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput">close <span class="string">all</span>;
+clear;
+
+station_lon = 236.620;
+station_lat =  48.417;
+time_start_2017 = datenum(2017,7,1,0,0,0);
+time_end_2017   = datenum(2017,7,1,23,59,59);
+time_start_2018 = datenum(2018,7,1,0,0,0);
+time_end_2018   = datenum(2018,7,1,23,59,59);
+
+hour_data = load(<span class="string">"data/AllStations_temperature_h_2019.dat"</span>);
+[hour_rows, hour_cols] = size(hour_data);
+all_hour_times = hour_data(3:hour_rows,1);
+station_lon_all = hour_data(1,2:hour_cols);
+station_lat_all = hour_data(2,2:hour_cols);
+number_stations = length(station_lat_all);
+temperature_data_all = hour_data(3:hour_rows,2:hour_cols);
+
+diff_lon = abs(station_lon_all - station_lon);
+diff_lat = abs(station_lat_all - station_lat);
+
+[~,station_index] = min(diff_lon+diff_lat);
+station_temps = temperature_data_all(:,station_index);
+
+timestamps_index_2017 = find(all_hour_times &gt;= time_start_2017 &amp; all_hour_times &lt;= time_end_2017);
+hour_times_2017  = all_hour_times(timestamps_index_2017);
+hour_temps_2017 = station_temps(timestamps_index_2017);
+timestamps_index_2018 = find(all_hour_times &gt;= time_start_2018 &amp; all_hour_times &lt;= time_end_2018);
+hour_times_2018  = all_hour_times(timestamps_index_2018);
+hour_temps_2018 = station_temps(timestamps_index_2018);
+
+minute_data = load(<span class="string">"data\JamesBay_temperature_2019.dat"</span>);
+minute_time_start = minute_data(1);
+minute_time_end = minute_data(2);
+minute_data_points = minute_data(3);
+all_minute_times = linspace(minute_time_start, minute_time_end, minute_data_points) - 7/24;
+all_minute_temperatures = minute_data(4:minute_data_points+3);
+
+minute_index_2017 = find(all_minute_times &gt;= time_start_2017 &amp; all_minute_times &lt;= time_end_2017);
+min_times_2017 = all_minute_times(minute_index_2017);
+min_temps_2017 = all_minute_temperatures(minute_index_2017);
+
+minute_index_2018 = find(all_minute_times &gt;= time_start_2018 &amp; all_minute_times &lt;= time_end_2018);
+min_times_2018 = all_minute_times(minute_index_2018);
+min_temps_2018 = all_minute_temperatures(minute_index_2018);
+
+figure(1)
+subplot(2,1,1)
+ hold <span class="string">on</span>;
+ plot(hour_times_2017, hour_temps_2017, <span class="string">'r'</span>)
+ plot(min_times_2017, min_temps_2017, <span class="string">'b'</span>)
+ xlabel(<span class="string">'Time [Local]'</span>)
+ ylabel(<span class="string">'Temperature [^oC]'</span>)
+ title(<span class="string">'1 July, 2017 Temperature'</span>);
+ legend({<span class="string">'Hourly'</span>, <span class="string">'Minutely'</span>});
+ datetick(<span class="string">'x'</span>)
+
+ figure(1)
+ subplot(2,1,2)
+  hold <span class="string">on</span>;
+  plot(hour_times_2018, hour_temps_2018, <span class="string">'r'</span>)
+  plot(min_times_2018, min_temps_2018, <span class="string">'b'</span>)
+  xlabel(<span class="string">'Time [Local]'</span>)
+  ylabel(<span class="string">'Temperature [^oC]'</span>)
+  title(<span class="string">'1 July, 2018 Temperature'</span>);
+  legend({<span class="string">'Hourly'</span>, <span class="string">'Minutely'</span>});
+  datetick(<span class="string">'x'</span>)
+
+<span class="comment">% hourly confidence intervals</span>
+hour_mean_2017 = mean(hour_temps_2017);
+hour_mean_2018 = mean(hour_temps_2018);
+disp(<span class="string">"2017 hourly mean: "</span> + hour_mean_2017)
+disp(<span class="string">"2018 hourly mean: "</span> + hour_mean_2018)
+[conf_2017, conf_2018] = conf(hour_temps_2017, hour_temps_2018);
+disp(<span class="string">"2017 confidence interval: ["</span> + conf_2017(1) + <span class="string">", "</span> + conf_2017(2) + <span class="string">"]"</span>);
+disp(<span class="string">"2018 confidence interval: ["</span> + conf_2018(1) + <span class="string">", "</span> + conf_2018(2) + <span class="string">"]"</span>);
+
+disp(<span class="string">" "</span>)
+
+<span class="comment">% minutely confidence intervals</span>
+min_mean_2017 = mean(min_temps_2017);
+min_mean_2018 = mean(min_temps_2018);
+disp(<span class="string">"2017 minute mean: "</span> + min_mean_2017)
+disp(<span class="string">"2018 minute mean: "</span> + min_mean_2018)
+[conf_2017_min, conf_2018_min] = conf(min_temps_2017, min_temps_2018);
+disp(<span class="string">"2017 confidence interval: ["</span> + conf_2017_min(1) + <span class="string">", "</span> + conf_2017_min(2) + <span class="string">"]"</span>);
+disp(<span class="string">"2018 confidence interval: ["</span> + conf_2018_min(1) + <span class="string">", "</span> + conf_2018_min(2) + <span class="string">"]"</span>);
+</pre><pre class="codeoutput">2017 hourly mean: 14.2329
+2018 hourly mean: 14.4837
+There is an overlap in confidence intervals at 95%.
+2017 confidence interval: [13.4123, 15.0535]
+2018 confidence interval: [13.9477, 15.0198]
+ 
+2017 minute mean: 14.2341
+2018 minute mean: 14.4844
+There is an NOT overlap in confidence intervals at 95%.
+2017 confidence interval: [14.1288, 14.3394]
+2018 confidence interval: [14.4147, 14.554]
+</pre><img vspace="5" hspace="5" src="main_01.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+close all;
+clear;
+
+station_lon = 236.620; 
+station_lat =  48.417;
+time_start_2017 = datenum(2017,7,1,0,0,0);
+time_end_2017   = datenum(2017,7,1,23,59,59);
+time_start_2018 = datenum(2018,7,1,0,0,0);
+time_end_2018   = datenum(2018,7,1,23,59,59);
+
+hour_data = load("data/AllStations_temperature_h_2019.dat");
+[hour_rows, hour_cols] = size(hour_data); 
+all_hour_times = hour_data(3:hour_rows,1); 
+station_lon_all = hour_data(1,2:hour_cols); 
+station_lat_all = hour_data(2,2:hour_cols); 
+number_stations = length(station_lat_all); 
+temperature_data_all = hour_data(3:hour_rows,2:hour_cols);
+
+diff_lon = abs(station_lon_all - station_lon);  
+diff_lat = abs(station_lat_all - station_lat);  
+
+[~,station_index] = min(diff_lon+diff_lat);
+station_temps = temperature_data_all(:,station_index); 
+
+timestamps_index_2017 = find(all_hour_times >= time_start_2017 & all_hour_times <= time_end_2017);  
+hour_times_2017  = all_hour_times(timestamps_index_2017);
+hour_temps_2017 = station_temps(timestamps_index_2017);
+timestamps_index_2018 = find(all_hour_times >= time_start_2018 & all_hour_times <= time_end_2018);  
+hour_times_2018  = all_hour_times(timestamps_index_2018);
+hour_temps_2018 = station_temps(timestamps_index_2018);
+
+minute_data = load("data\JamesBay_temperature_2019.dat");
+minute_time_start = minute_data(1);
+minute_time_end = minute_data(2); 
+minute_data_points = minute_data(3);
+all_minute_times = linspace(minute_time_start, minute_time_end, minute_data_points) - 7/24;
+all_minute_temperatures = minute_data(4:minute_data_points+3);
+
+minute_index_2017 = find(all_minute_times >= time_start_2017 & all_minute_times <= time_end_2017); 
+min_times_2017 = all_minute_times(minute_index_2017);
+min_temps_2017 = all_minute_temperatures(minute_index_2017);
+
+minute_index_2018 = find(all_minute_times >= time_start_2018 & all_minute_times <= time_end_2018); 
+min_times_2018 = all_minute_times(minute_index_2018);
+min_temps_2018 = all_minute_temperatures(minute_index_2018);
+
+figure(1)
+subplot(2,1,1)
+ hold on;
+ plot(hour_times_2017, hour_temps_2017, 'r')
+ plot(min_times_2017, min_temps_2017, 'b')
+ xlabel('Time [Local]')
+ ylabel('Temperature [^oC]')
+ title('1 July, 2017 Temperature');
+ legend({'Hourly', 'Minutely'});
+ datetick('x')
+ 
+ figure(1)
+ subplot(2,1,2)
+  hold on;
+  plot(hour_times_2018, hour_temps_2018, 'r')
+  plot(min_times_2018, min_temps_2018, 'b')
+  xlabel('Time [Local]')
+  ylabel('Temperature [^oC]')
+  title('1 July, 2018 Temperature');
+  legend({'Hourly', 'Minutely'});
+  datetick('x')
+ 
+% hourly confidence intervals
+hour_mean_2017 = mean(hour_temps_2017);
+hour_mean_2018 = mean(hour_temps_2018);
+disp("2017 hourly mean: " + hour_mean_2017)
+disp("2018 hourly mean: " + hour_mean_2018)
+[conf_2017, conf_2018] = conf(hour_temps_2017, hour_temps_2018);
+disp("2017 confidence interval: [" + conf_2017(1) + ", " + conf_2017(2) + "]");
+disp("2018 confidence interval: [" + conf_2018(1) + ", " + conf_2018(2) + "]");
+
+disp(" ")
+
+% minutely confidence intervals
+min_mean_2017 = mean(min_temps_2017);
+min_mean_2018 = mean(min_temps_2018);
+disp("2017 minute mean: " + min_mean_2017)
+disp("2018 minute mean: " + min_mean_2018)
+[conf_2017_min, conf_2018_min] = conf(min_temps_2017, min_temps_2018);
+disp("2017 confidence interval: [" + conf_2017_min(1) + ", " + conf_2017_min(2) + "]");
+disp("2018 confidence interval: [" + conf_2018_min(1) + ", " + conf_2018_min(2) + "]");
+##### SOURCE END #####
+--></body></html>

@@ -5,4 +5,3 @@ b_dem = N*sum(x.^2) - (sum(x))^2;
 b = b_num / b_dem;
 a = (sum(y) - b*sum(x)) / N; 
 end
-
