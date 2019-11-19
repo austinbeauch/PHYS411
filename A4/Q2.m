@@ -36,7 +36,11 @@ order = 5;
 [b,a] = butter(order ,fc/(fs/2));
 
 figure(3)
-freqz(b,a)
+[Hf, wf] = freqz(b,a);
+plot(wf, abs(Hf))
+title("Frequency response of Butterworth filter")
+xlabel("Frequency (Hz)")
+ylabel("Response")
 
 figure(4)
 hold on;

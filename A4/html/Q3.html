@@ -1,0 +1,314 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Q3</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-11-05"><meta name="DC.source" content="Q3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput">close <span class="string">all</span>;
+clear;
+
+hourly = <span class="string">"../A3/data/AllStations_temperature_h_2019.dat"</span>;
+
+station_lon = 236.620;
+station_lat =  48.417;
+start_winter = datenum(2015,11,1,0,0,0);
+end_winter   = datenum(2016,3,15,0,0,0);
+start_summer = datenum(2016,5,15,0,0,0);
+end_summer   = datenum(2016,9,30,0,0,0);
+
+[time_summer, temp_summer] = <span class="keyword">...</span>
+    getdata(hourly, station_lon, station_lat, start_summer, end_summer);
+temp_summer = temp_summer - nanmean(temp_summer);
+
+[time_winter, temp_winter] = <span class="keyword">...</span>
+    getdata(hourly, station_lon, station_lat, start_winter, end_winter);
+temp_winter = temp_winter - nanmean(temp_winter);
+
+<span class="comment">% interpolate our records (the original typo'd version had some gaps, but</span>
+<span class="comment">% I'll keep this here</span>
+temp_summer = interpolate(time_summer, temp_summer);
+temp_winter = interpolate(time_winter, temp_winter);
+
+<span class="comment">% this record still has NaN's at the end of the set</span>
+mask = ~isnan(temp_winter);
+temp_winter = temp_winter(mask);
+time_winter = time_winter(mask);
+mask = ~isnan(temp_summer);
+temp_summer = temp_summer(mask);
+time_summer = time_summer(mask);
+
+figure(1)
+hold <span class="string">on</span>;
+plot(time_summer, temp_summer)
+plot(time_winter, temp_winter)
+xlabel(<span class="string">'Time'</span>)
+ylabel(<span class="string">'Temperature [^oC]'</span>)
+title(<span class="string">'Mean-Removed Datasets'</span>);
+datetick(<span class="string">'x'</span>)
+
+<span class="comment">% chosen to reduce noise and tighten the confidence interval</span>
+NFFT = 2048/2^2;
+[pxx_winter, f_winter, pxxc_winter] = pwelch(temp_winter, NFFT, NFFT/2, NFFT, 1/3600);
+[pxx_summer, f_summer, pxxc_summer] = pwelch(temp_summer, NFFT, NFFT/2, NFFT, 1/3600);
+
+s_to_day = 60*60*24;
+
+figure(2)
+subplot(2,1,1)
+hold <span class="string">off</span>;
+loglog(f_winter .* s_to_day, pxx_winter);
+hold <span class="string">on</span>;
+loglog(f_winter .* s_to_day, pxxc_winter, <span class="string">'color'</span>,[0,0,0,0.2]);
+xlabel(<span class="string">'Cycles per day (cpd)'</span>)
+ylabel(<span class="string">'PSD (dB/Hz)'</span>)
+title(<span class="string">'1 November 2015 to 15 March 2016 PSD with 95%-Confidence Bounds'</span>)
+
+subplot(2,1,2)
+hold <span class="string">off</span>;
+loglog(f_winter .* s_to_day, pxxc_summer, <span class="string">'color'</span>, [0,0,0,0.2]);
+hold <span class="string">on</span>;
+loglog(f_summer .* s_to_day, pxx_summer);
+xlabel(<span class="string">'Cycles per day (cpd)'</span>)
+ylabel(<span class="string">'PSD (dB/Hz)'</span>)
+title(<span class="string">'15 May 2016 to 30 September 2016 PSD with 95%-Confidence Bounds'</span>)
+
+fSyy_winter = f_winter .* pxx_winter;
+fSyy_summer = f_summer .* pxx_summer;
+logf_winter = log10(f_winter);
+logf_summer = log10(f_summer);
+
+figure(3); hold <span class="string">off</span>;
+semilogx(f_winter, fSyy_winter);
+hold <span class="string">on</span>;
+semilogx(f_summer, fSyy_summer);
+xlabel(<span class="string">'Frequency (Hz)'</span>);
+ylabel(<span class="string">'fS_{yy}'</span>);
+title(<span class="string">'Variance Preserving PSDs'</span>);
+legend(<span class="string">'Winter'</span>, <span class="string">'Summer'</span>)
+
+<span class="comment">% Paresval's theorem</span>
+<span class="comment">% integral Syy(f) df = variance (x(t))</span>
+fwinter_int = trapz(f_winter, pxx_winter);
+fsummer_int = trapz(f_winter, pxx_summer);
+
+winter_var = var(temp_winter);
+summer_var = var(temp_summer);
+
+disp(<span class="string">"Winter PSD integral: "</span> + fwinter_int);
+disp(<span class="string">"Winter variance: "</span> + winter_var);
+
+disp(<span class="string">"Summer PSD integral: "</span> + fsummer_int);
+disp(<span class="string">"Summer variance: "</span> + summer_var);
+
+<span class="keyword">function</span> [times, temps] = getdata(path, lon, lat, time_start, time_end)
+    data = load(path);
+    [hour_rows, hour_cols] = size(data);
+    all_times = data(3:hour_rows,1);
+    station_lon_all = data(1,2:hour_cols);
+    station_lat_all = data(2,2:hour_cols);
+    temperature_data_all = data(3:hour_rows,2:hour_cols);
+
+    diff_lon = abs(station_lon_all - lon);
+    diff_lat = abs(station_lat_all - lat);
+
+    [~, station_index] = min(diff_lon+diff_lat);
+    station_temps = temperature_data_all(:,station_index);
+
+    index = find(all_times &gt;= time_start &amp; all_times &lt;= time_end);
+    times = all_times(index);
+    temps = station_temps(index);
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> [new_temps] = interpolate(time_in, data_in)
+    ii_good = find(~isnan(data_in));
+    new_temps = interp1(time_in(ii_good), data_in(ii_good), time_in);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Winter PSD integral: 6.3346
+Winter variance: 7.2582
+Summer PSD integral: 7.0224
+Summer variance: 7.2105
+</pre><img vspace="5" hspace="5" src="Q3_01.png" alt=""> <img vspace="5" hspace="5" src="Q3_02.png" alt=""> <img vspace="5" hspace="5" src="Q3_03.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+close all;
+clear;
+
+hourly = "../A3/data/AllStations_temperature_h_2019.dat";
+
+station_lon = 236.620; 
+station_lat =  48.417;
+start_winter = datenum(2015,11,1,0,0,0);
+end_winter   = datenum(2016,3,15,0,0,0);
+start_summer = datenum(2016,5,15,0,0,0);
+end_summer   = datenum(2016,9,30,0,0,0);
+
+[time_summer, temp_summer] = ...
+    getdata(hourly, station_lon, station_lat, start_summer, end_summer);
+temp_summer = temp_summer - nanmean(temp_summer);
+
+[time_winter, temp_winter] = ...
+    getdata(hourly, station_lon, station_lat, start_winter, end_winter);
+temp_winter = temp_winter - nanmean(temp_winter);
+
+% interpolate our records (the original typo'd version had some gaps, but
+% I'll keep this here
+temp_summer = interpolate(time_summer, temp_summer);
+temp_winter = interpolate(time_winter, temp_winter);
+
+% this record still has NaN's at the end of the set
+mask = ~isnan(temp_winter);
+temp_winter = temp_winter(mask);
+time_winter = time_winter(mask);
+mask = ~isnan(temp_summer);
+temp_summer = temp_summer(mask);
+time_summer = time_summer(mask);
+
+figure(1)
+hold on;
+plot(time_summer, temp_summer)
+plot(time_winter, temp_winter)
+xlabel('Time')
+ylabel('Temperature [^oC]')
+title('Mean-Removed Datasets');
+datetick('x')
+
+% chosen to reduce noise and tighten the confidence interval
+NFFT = 2048/2^2;
+[pxx_winter, f_winter, pxxc_winter] = pwelch(temp_winter, NFFT, NFFT/2, NFFT, 1/3600);
+[pxx_summer, f_summer, pxxc_summer] = pwelch(temp_summer, NFFT, NFFT/2, NFFT, 1/3600);
+
+s_to_day = 60*60*24;
+
+figure(2)
+subplot(2,1,1)
+hold off;
+loglog(f_winter .* s_to_day, pxx_winter);
+hold on;
+loglog(f_winter .* s_to_day, pxxc_winter, 'color',[0,0,0,0.2]);
+xlabel('Cycles per day (cpd)')
+ylabel('PSD (dB/Hz)')
+title('1 November 2015 to 15 March 2016 PSD with 95%-Confidence Bounds')
+
+subplot(2,1,2)
+hold off;
+loglog(f_winter .* s_to_day, pxxc_summer, 'color', [0,0,0,0.2]);
+hold on;
+loglog(f_summer .* s_to_day, pxx_summer);
+xlabel('Cycles per day (cpd)')
+ylabel('PSD (dB/Hz)')
+title('15 May 2016 to 30 September 2016 PSD with 95%-Confidence Bounds')
+
+fSyy_winter = f_winter .* pxx_winter;
+fSyy_summer = f_summer .* pxx_summer;
+logf_winter = log10(f_winter);
+logf_summer = log10(f_summer);
+
+figure(3); hold off;
+semilogx(f_winter, fSyy_winter);
+hold on;
+semilogx(f_summer, fSyy_summer);
+xlabel('Frequency (Hz)');
+ylabel('fS_{yy}');
+title('Variance Preserving PSDs');
+legend('Winter', 'Summer')
+
+% Paresval's theorem
+% integral Syy(f) df = variance (x(t))
+fwinter_int = trapz(f_winter, pxx_winter);
+fsummer_int = trapz(f_winter, pxx_summer);
+
+winter_var = var(temp_winter);
+summer_var = var(temp_summer);
+
+disp("Winter PSD integral: " + fwinter_int);
+disp("Winter variance: " + winter_var);
+
+disp("Summer PSD integral: " + fsummer_int);
+disp("Summer variance: " + summer_var);
+
+function [times, temps] = getdata(path, lon, lat, time_start, time_end)
+    data = load(path);
+    [hour_rows, hour_cols] = size(data); 
+    all_times = data(3:hour_rows,1); 
+    station_lon_all = data(1,2:hour_cols); 
+    station_lat_all = data(2,2:hour_cols); 
+    temperature_data_all = data(3:hour_rows,2:hour_cols);
+
+    diff_lon = abs(station_lon_all - lon);  
+    diff_lat = abs(station_lat_all - lat);  
+
+    [~, station_index] = min(diff_lon+diff_lat);
+    station_temps = temperature_data_all(:,station_index); 
+
+    index = find(all_times >= time_start & all_times <= time_end);  
+    times = all_times(index);
+    temps = station_temps(index);
+end
+
+function [new_temps] = interpolate(time_in, data_in)
+    ii_good = find(~isnan(data_in));
+    new_temps = interp1(time_in(ii_good), data_in(ii_good), time_in);
+end
+##### SOURCE END #####
+--></body></html>

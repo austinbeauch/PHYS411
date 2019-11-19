@@ -3,8 +3,8 @@ clear;
 
 hourly = "../A3/data/AllStations_temperature_h_2019.dat";
 
-station_lon = 236.417; 
-station_lat =  48.620;
+station_lon = 236.620; 
+station_lat =  48.417;
 start_winter = datenum(2015,11,1,0,0,0);
 end_winter   = datenum(2016,3,15,0,0,0);
 start_summer = datenum(2016,5,15,0,0,0);
@@ -18,18 +18,18 @@ temp_summer = temp_summer - nanmean(temp_summer);
     getdata(hourly, station_lon, station_lat, start_winter, end_winter);
 temp_winter = temp_winter - nanmean(temp_winter);
 
-% interpolate our records
+% interpolate our records (the original typo'd version had some gaps, but
+% I'll keep this here
 temp_summer = interpolate(time_summer, temp_summer);
 temp_winter = interpolate(time_winter, temp_winter);
 
-% this record still have NaN's at the end of the set
+% this record still has NaN's at the end of the set
 mask = ~isnan(temp_winter);
 temp_winter = temp_winter(mask);
 time_winter = time_winter(mask);
 mask = ~isnan(temp_summer);
 temp_summer = temp_summer(mask);
 time_summer = time_summer(mask);
-
 
 figure(1)
 hold on;
@@ -45,22 +45,24 @@ NFFT = 2048/2^2;
 [pxx_winter, f_winter, pxxc_winter] = pwelch(temp_winter, NFFT, NFFT/2, NFFT, 1/3600);
 [pxx_summer, f_summer, pxxc_summer] = pwelch(temp_summer, NFFT, NFFT/2, NFFT, 1/3600);
 
+s_to_day = 60*60*24;
+
 figure(2)
 subplot(2,1,1)
 hold off;
-loglog(f_winter, pxx_winter);
+loglog(f_winter .* s_to_day, pxx_winter);
 hold on;
-loglog(f_winter, pxxc_winter, 'color',[1,0,0,0.2]);
-xlabel('Frequency (Hz)')
+loglog(f_winter .* s_to_day, pxxc_winter, 'color',[0,0,0,0.2]);
+xlabel('Cycles per day (cpd)')
 ylabel('PSD (dB/Hz)')
 title('1 November 2015 to 15 March 2016 PSD with 95%-Confidence Bounds')
 
 subplot(2,1,2)
 hold off;
-loglog(f_winter, pxxc_summer, 'color',[1,0,1,0.2]);
+loglog(f_winter .* s_to_day, pxxc_summer, 'color', [0,0,0,0.2]);
 hold on;
-loglog(f_summer, pxx_summer);
-xlabel('Frequency (Hz)')
+loglog(f_summer .* s_to_day, pxx_summer);
+xlabel('Cycles per day (cpd)')
 ylabel('PSD (dB/Hz)')
 title('15 May 2016 to 30 September 2016 PSD with 95%-Confidence Bounds')
 
@@ -70,25 +72,27 @@ logf_winter = log10(f_winter);
 logf_summer = log10(f_summer);
 
 figure(3); hold off;
-plot(logf_winter, fSyy_winter);
+semilogx(f_winter, fSyy_winter);
 hold on;
-plot(logf_summer, fSyy_summer);
+semilogx(f_summer, fSyy_summer);
 xlabel('Frequency (Hz)');
 ylabel('fS_{yy}');
 title('Variance Preserving PSDs');
 legend('Winter', 'Summer')
 
 % Paresval's theorem
-fwinter_int = trapz(logf_winter(2:end), fSyy_winter(2:end));
-fsummer_int = trapz(logf_summer(2:end), fSyy_summer(2:end));
+% integral Syy(f) df = variance (x(t))
+fwinter_int = trapz(f_winter, pxx_winter);
+fsummer_int = trapz(f_winter, pxx_summer);
 
-time_winter_int = trapz(time_winter, temp_winter.^2) / length(temp_winter);
-time_summer_int = trapz(time_summer, temp_summer.^2) / length(temp_summer);
+winter_var = var(temp_winter);
+summer_var = var(temp_summer);
 
-disp("Energy for winter: " + time_winter_int);
-disp("PSD Energy for winter: " + fwinter_int);
-disp("Energy for summer: " + time_summer_int);
-disp("PSD Energy for summer: " + fsummer_int);
+disp("Winter PSD integral: " + fwinter_int);
+disp("Winter variance: " + winter_var);
+
+disp("Summer PSD integral: " + fsummer_int);
+disp("Summer variance: " + summer_var);
 
 function [times, temps] = getdata(path, lon, lat, time_start, time_end)
     data = load(path);

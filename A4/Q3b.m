@@ -31,25 +31,27 @@ datetick('x')
 
 % chosen to reduce noise and tighten the confidence interval
 NFFT = 2^12;
-[pxx_winter, f_winter, pxxc_winter] = pwelch(temp_winter, NFFT, NFFT/2, NFFT, 1/3600);
-[pxx_summer, f_summer, pxxc_summer] = pwelch(temp_summer, NFFT, NFFT/2, NFFT, 1/3600);
+[pxx_winter, f_winter, pxxc_winter] = pwelch(temp_winter, NFFT, NFFT/2, NFFT, 1/60);
+[pxx_summer, f_summer, pxxc_summer] = pwelch(temp_summer, NFFT, NFFT/2, NFFT, 1/60);
+
+s_to_day = 60*60*24;
 
 figure(2)
 subplot(2,1,1)
 hold off;
-loglog(f_winter, pxx_winter);
+loglog(f_winter .* s_to_day, pxx_winter);
 hold on;
-loglog(f_winter, pxxc_winter, 'color',[0,0,0,0.2]);
-xlabel('Frequency (Hz)')
+loglog(f_winter .* s_to_day, pxxc_winter, 'color',[0,0,0,0.2]);
+xlabel('Cycles per day (cpd)')
 ylabel('PSD (dB/Hz)')
 title('Winter Minute PSD with 95%-Confidence Bounds')
 
 subplot(2,1,2)
 hold off;
-loglog(f_winter, pxxc_summer, 'color',[0,0,0,0.2]);
+loglog(f_winter .* s_to_day, pxxc_summer, 'color',[0,0,0,0.2]);
 hold on;
-loglog(f_summer, pxx_summer);
-xlabel('Frequency (Hz)')
+loglog(f_summer .* s_to_day, pxx_summer);
+xlabel('Cycles per day (cpd)')
 ylabel('PSD (dB/Hz)')
 title('Summer Minute PSD with 95%-Confidence Bounds')
 
