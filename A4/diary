@@ -1,0 +1,9 @@
+worldmap({'Canada'})
+land = shaperead('landareas.shp', 'UseGeoCoords', true);
+geoshow(land, 'FaceColor', [0.15 0.5 0.15])
+
+file = load("AllStations_temperature_h_2019.dat");
+x = file(1:2, 2:end);
+x1 =  file(1:1, 2:end);
+x2 =  file(2:2, 2:end);
+geoshow(x2, x1, 'Marker', '.', 'Color', 'red', 'LineStyle','none')
