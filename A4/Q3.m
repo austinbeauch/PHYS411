@@ -68,8 +68,6 @@ title('15 May 2016 to 30 September 2016 PSD with 95%-Confidence Bounds')
 
 fSyy_winter = f_winter .* pxx_winter;
 fSyy_summer = f_summer .* pxx_summer;
-logf_winter = log10(f_winter);
-logf_summer = log10(f_summer);
 
 figure(3); hold off;
 semilogx(f_winter, fSyy_winter);
