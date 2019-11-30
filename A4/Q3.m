@@ -1,7 +1,7 @@
 close all;
 clear;
 
-hourly = "../A3/data/AllStations_temperature_h_2019.dat";
+hourly = "../project/data/hourly_data.dat";
 
 station_lon = 236.620; 
 station_lat =  48.417;

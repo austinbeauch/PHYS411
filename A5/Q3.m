@@ -11,18 +11,19 @@ t_end   = datenum(2018,12,31,0,0,0);
 [time, temp] = getdata(hourly, station_lon, station_lat, t_start, t_end);
 
 nan_mask = find(~isnan(temp));
-times = time(nan_mask);
-temps = temp(nan_mask);
-temps = temps - mean(temps);
+time = time(nan_mask);
+temp = temp(nan_mask);
+temp = temp - mean(temp);
 
-q3(times, temps, 0.6)
-q3(times, temps, 0.45)
-
+q3(time, temp, 0.6)
+q3(time, temp, 0.45)
+T_sub = 0.6;
 function q3(time, temp, T_sub)
+    samples_per_hour = 24/T_sub;
     may_start = datenum(2018,5,1,0,0,0);
     may_end   = datenum(2018,5,31,0,0,0);
     may_mask = find(time >= may_start & time <= may_end); 
-    new_time = linspace(time(1), time(end), (time(end)-time(1))*T_sub);
+    new_time = linspace(time(1), time(end), (time(end)-time(1))/T_sub);
     new_temp = interp1(time, temp, new_time);
     interp_may_mask = find(new_time >= may_start & new_time <= may_end);
 
@@ -38,17 +39,18 @@ function q3(time, temp, T_sub)
     title("Weather Data at  UVic Science Building, T_{sub}=" + T_sub);
     legend(["Original", "Interpolated", "Spline fitted"]);
     datetick('x')
-
-    NFFT = 2^7;
-    [pxx, f] = pwelch(temp, NFFT, NFFT/2, NFFT, 1/3600);
-    [pxx_interp, f_interp] = pwelch(new_temp, NFFT, NFFT/2, NFFT, 1/3600);
-    [pxx_spline, f_spline] = pwelch(splined, NFFT, NFFT/2, NFFT, 1/3600);
     
+    NFFT = 2^10;
+    short_NFFT = 2^5;
+    [pxx, f] = pwelch(temp, NFFT, NFFT/2, NFFT, 1/3600);
+    [pxx_interp, f_interp] = pwelch(new_temp, short_NFFT, short_NFFT/2, short_NFFT, 1/3600*T_sub/samples_per_hour);
+    [pxx_spline, f_spline] = pwelch(splined, NFFT, NFFT/2, NFFT, 1/3600);
+
     s_to_day = 60*60*24;
 
-    figure()
-    hold on 
-    loglog(f .* s_to_day, pxx);
+    figure() 
+    loglog(f * s_to_day, pxx);
+    hold on
     loglog(f_interp .* s_to_day, pxx_interp);
     loglog(f_spline .* s_to_day, pxx_spline);
     xlabel('Cycles per day (cpd)')
