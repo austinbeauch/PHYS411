@@ -27,16 +27,3 @@ for i = n_station_array
     tmp = all_temps(i, :);
     disp(labels(i) + ":  Mean = " + round(nanmean(tmp),2) + "°C , std = " + round(nanstd(tmp),2) + "°C" )
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
