@@ -28,9 +28,9 @@ figure
 hold on
 for i = 10:15
     temp_y = y(i, :);
-    mask = ~isnan(temp_y);
-    temp_y = temp_y(mask);
-    temp_x = x(mask);
+    msk = ~isnan(temp_y);
+    temp_y = temp_y(msk);
+    temp_x = x(msk);
     plot(temp_x, movmean(temp_y, 30))
 end  
 datetick('x')

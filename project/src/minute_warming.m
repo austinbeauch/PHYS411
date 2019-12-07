@@ -1,17 +1,20 @@
 % ASSUME MINUTE DATA HAS ALREADY BEEN LOADED
 % load_minute_data  % if not
 close all
+months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 figure
 hold on
+month1 = 7;
+month2 = month1 + 0;
 for k = n_station_array
     temp = all_temps(k, :);
     year_mean = [];
     year_middle = [];
     for iYear = 2010:2018
         % only taking temperatures from July
-        t_start = datenum(iYear,7,1,0,0,0);
-        t_end   = datenum(iYear,7,31,23,59,59);
+        t_start = datenum(iYear,month1,1,0,0,0);
+        t_end   = datenum(iYear,month2,31,23,59,59);
         index = find(times_minute >= t_start & times_minute <= t_end);  
         times = times_minute(index);
         temps = temp(index);
@@ -22,23 +25,27 @@ for k = n_station_array
     plot(year_middle, year_mean, 'o-');
     datetick('x')
 end
-title("Average July Temperatues")
+title("Average " + months(month1) + " Temperatues")
 xlabel("Time")
 ylabel("Temperature [°C]")
 legend(labels, 'FontSize',8, 'Location','northwest')
-print('-bestfit','../figures/july_averages_minute','-dpdf')
+% print('-bestfit','../figures/july_averages_minute','-dpdf')
 
-for k = n_station_array
-    figure(k+1)
+for i = 1:12
+    subplot(4,3,i)
+    month1 = i;
+    month2 = month1 + 0;
+for k = 6  % 6 for UVic
+%     figure(k+1)
     hold on
     % k = 5;
     temp = all_temps(k, :);
     year_mean = [];
     year_middle = [];
     for iYear = 2010:2018
-        % only taking temperatures from July
-        t_start = datenum(iYear,7,1,0,0,0);
-        t_end   = datenum(iYear,7,31,23,59,59);
+        % only taking temperatures from one month
+        t_start = datenum(iYear,month1,1,0,0,0);
+        t_end   = datenum(iYear,month2,31,23,59,59);
         index = find(times_minute >= t_start & times_minute <= t_end);  
         times = times_minute(index);
         temps = temp(index);
@@ -77,13 +84,16 @@ for k = n_station_array
     set(hp,'facecolor',[1,1,1]*0.8,'edgecolor','none')
     alpha(0.3) 
 
-    ylim([13 21])
+%     ylim([13 21])
+    xlim([datenum(2010,1,1,0,0,0) datenum(2019,2,31,23,59,59)]);
     middle = (min(year_mean)+max(year_mean))/2;
     plot([min(year_middle) max(year_middle)], [middle middle], 'k--')
 
-    legend({'Data Points' 'Linear Fit' '95% Confidence' 'Midline'}, 'Location','northwest')
-    title(labels(k) + " July Average Temperature Regression")
+%     legend({'Data Points' 'Linear Fit' '95% Confidence' 'Midline'}, 'Location','northwest')
+    title(months(month1))
     xlabel("Time")
     ylabel("Temperature [°C]")
 end
-% print('-bestfit','../figures/uvic_july_regression','-dpdf')
+end
+suptitle("UVic Weather Station Monthly Averages")
+print('-fillpage','../figures/uvic_yearly_regression','-dpdf')

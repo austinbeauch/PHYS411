@@ -19,7 +19,7 @@ ylabel("Station")
 yticklabels(labels)
 
 % saveas(gcf,'../figures/full_minutely_dataset.png')
-print('-bestfit','../figures/full_minutely_dataset','-dpdf')
+% print('-bestfit','../figures/full_minutely_dataset','-dpdf')
 
 %% Stats
 disp("Stats per station:")

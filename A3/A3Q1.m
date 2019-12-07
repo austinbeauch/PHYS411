@@ -41,7 +41,7 @@ title('Lag Correlation Coefficients');
 legend({'Winter', 'Summer', '1/e'})
 
 function [times, temps] = getdata(lon, lat, time_start, time_end)
-    data = load("data/AllStations_temperature_h_2019.dat");
+    data = load("../project/data/hourly_data.dat");
     [hour_rows, hour_cols] = size(data); 
     all_times = data(3:hour_rows,1); 
     station_lon_all = data(1,2:hour_cols); 

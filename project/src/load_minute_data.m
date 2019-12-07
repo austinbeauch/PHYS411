@@ -2,7 +2,7 @@ close all
 clear
 t_start = datenum(2010,1,1,0,0,0);
 t_end   = datenum(2018,12,31,23,59,59);
-[times_minute, james_temps] = getminute("../data/JamesBay_temperature_2019.dat", t_start, t_end);
+[all_times_min, james_temps] = getminute("../data/JamesBay_temperature_2019.dat", t_start, t_end);
 [~, deep_temps] = getminute("../data/DeepCove_temperature_2019.dat", t_start, t_end);
 [~, discovery_temps] = getminute("../data/DiscoveryElementary_temperature_2019.dat", t_start, t_end);
 [~, helgesen_temps] = getminute("../data/Helgesen_temperature_2019.dat", t_start, t_end);
