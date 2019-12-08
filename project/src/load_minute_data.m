@@ -13,4 +13,4 @@ t_end   = datenum(2018,12,31,23,59,59);
 n_stations = 7;
 n_station_array = (1:n_stations);
 all_temps = [deep_temps discovery_temps helgesen_temps james_temps keating_temps uvic_temps john_temps].';
-labels = ["Deep Cover", "Discovery Elementary", "Helgesen", "James Bay","Keating", "UVic",  "John Muir"];
+labels = ["Deep Cove", "Discovery Elementary", "Helgesen", "James Bay","Keating", "UVic",  "John Muir"];

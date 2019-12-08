@@ -4,7 +4,7 @@
 close all
 
 figure
-h = imagesc(times_minute, n_station_array, all_temps);
+h = imagesc(all_times_min, n_station_array, all_temps);
 h.AlphaData = ones(size(h.CData)); 
 h.AlphaData(isnan(h.CData)) = 0;
 c = colorbar;

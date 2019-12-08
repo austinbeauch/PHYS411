@@ -34,22 +34,3 @@ for i = 10:15
     plot(temp_x, movmean(temp_y, 30))
 end  
 datetick('x')
-% 
-% figure
-% lon =  data(1:1, 2:end);
-% lat =  data(2:2, 2:end);
-% hold on
-% for i = 1:length(lon)
-%     year_mean = [];
-%     year_middle = [];
-%     for iYear = 2008:2018
-%         t_start = datenum(iYear,1,1,0,0,0);
-%         t_end   = datenum(iYear,12,31,23,59,59);
-%         [times, temps] = getdata(data, lon(i), lat(i), t_start, t_end);
-%         m = nanmean(temps);
-%         year_mean = [year_mean m];
-%         year_middle= [year_middle (t_end+t_start)/2];
-%     end 
-%     plot(year_middle, year_mean);
-%     datetick('x')
-% end
