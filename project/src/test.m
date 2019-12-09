@@ -1,13 +1,29 @@
 close all;
 
-winter_time_start = datenum(2016,10,28,0,0,0);
-winter_time_end   = datenum(2017,1,26,0,0,0);
+interp_type = "cubic";
 
-temps_1 = all_temps(3, :);
+date = datenum(2016,6,0,0,0,0);
+time_index = find(all_times > (date-0.0417) & all_times < (date+0.0417));
+station_temps = all_temps(:,time_index);
+if any(isnan(station_temps))
+    error("Contains a nan")
+end
+[XX_size, ~] = size(coast_lon);
+[YY_size, ~] = size(coast_lat);
+[XX_grid,YY_grid] = meshgrid(coast_lon, coast_lat, interp_type);
 
-[times_1, temps_1] = in_range(all_times_min, temps_1, winter_time_start, winter_time_end);
-[times_1, temps_1] = mask(times_1, temps_1);
+gridded_data = griddata(station_lon, station_lat, station_temps, XX_grid, YY_grid);
 
+figure
+hold on
+mapshow(coast_lon, coast_lat, 'DisplayType','polygon','FaceColor','#77AC30')
+set(gca, 'dataaspectRatio', [1 cos(49*pi/180) 1])
+h = pcolor(XX_grid,YY_grid,gridded_data);
+set(h, 'EdgeColor', 'none');
+title(interp_type + " Interpolation on " + datestr(all_times(time_index)))
+c = colorbar;
+c.Label.String = 'Temperature [^{o}C]';
+geoshow(station_lat, station_lon, 'Marker', '.', 'Color', 'red', 'LineStyle','none')
 
-[acf,lags,bounds] = autocorr(temps_1);
-plot(acf, lags)
+xlabel('Longitude')
+ylabel('Latitude')
