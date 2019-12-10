@@ -55,21 +55,5 @@ c = colorbar;
 c.Label.String = 'Temperature [^{o}C]';
 caxis([min(nearest(:)) max(nearest(:))]);
 
-% figure
-% hold on
-% % [vx,vy]  = voronoi(x,y);
+voronoi(x,y);
 geoshow(coast_lat_flip, coast_lon_flip, 'DisplayType', 'polygon', 'FaceColor', 'w')
-% 
-% pts = [x ; y]';
-% [v,c] = voronoin(pts);
-% 
-% [vx,vy] = voronoi(x, y);
-% color = {'r' 'b' 'g' 'm' 'c' 'y' 'k' 'w'} ;
-% for i = 1:length(c)
-%     xs = v(c{i},1);
-%     ys = v(c{i},2);
-%     fill(xs, ys, 'r') ;
-% end
-% 
-% xlim([-123.75 -123.26])
-% ylim([48.3 48.7])
