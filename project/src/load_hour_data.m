@@ -19,12 +19,9 @@ lon_trunc = lon(indslon);
 z_trunc = z(indslat, indslon);
 
 world = load("../data/coast.dat");
-flipped = flipud(world);
+world_flipped = flipud(world);
 coast_lon = world(:,1);
 coast_lat = world(:,2);
 
-% idx=find(coast_lon <= -123.2 & coast_lon >= -123.8); 
-% coast_lon = coast_lon(indslon);
-% 
-% idx=find(coast_lat >= 48.3 & coast_lat <= 48.71);
-% coast_lat = coast_lat(indslat);
+coast_lon_flip = world_flipped(:,1);
+coast_lat_flip = world_flipped(:,2);

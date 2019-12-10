@@ -7,7 +7,7 @@ h.AlphaData(isnan(h.CData)) = 0;
 
 c = colorbar;
 c.Label.String = '°C';
-caxis([-max(all_temps(:)) max(all_temps(:))]);
+caxis([min(all_temps(:)) max(all_temps(:))]);
 
 datetick('x')
 title("Full Hourly Dataset")
