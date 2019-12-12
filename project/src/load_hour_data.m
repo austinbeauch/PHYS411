@@ -18,10 +18,10 @@ indslon=find(lon <= -123.2 & lon >= -123.8);
 lon_trunc = lon(indslon);
 z_trunc = z(indslat, indslon);
 
-world = load("../data/coast.dat");
-world_flipped = flipud(world);
-coast_lon = world(:,1);
-coast_lat = world(:,2);
-
+coast = load("../data/coast.dat");
+[size_grid, ~] = size(coast);
+world_flipped = flipud(coast);
+coast_lon = coast(:,1);
+coast_lat = coast(:,2);
 coast_lon_flip = world_flipped(:,1);
 coast_lat_flip = world_flipped(:,2);
